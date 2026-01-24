@@ -79,7 +79,7 @@
         </div>
     </div>
 
-    <audio id="bg-music" loop>
+    <audio id="bg-music" loop preload="auto">
         <source src="media/lagu.mp3" type="audio/mpeg">
     </audio>
 
@@ -132,8 +132,19 @@ maaf alay`;
 
         function startJourney() {
             landingPage.style.opacity = '0';
+            
+            // Audio Play Optimization
             audio.volume = 0.5;
-            audio.play().catch(e => console.log("Audio error:", e));
+            var playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Autoplay started!
+                })
+                .catch(error => {
+                    console.log("Audio play failed, user interaction needed.");
+                });
+            }
+
             setTimeout(() => {
                 landingPage.style.display = 'none';
                 mainPage.style.display = 'flex';
@@ -155,9 +166,13 @@ maaf alay`;
 
         function startTyping() {
             if (charIndex < fullText.length) {
-                textElement.innerHTML += fullText.charAt(charIndex);
+                // UPDATE: Menggunakan textContent agar lebih ringan (tidak memicu reflow berat)
+                textElement.textContent += fullText.charAt(charIndex);
                 charIndex++;
+                
+                // Scroll otomatis mengikuti teks
                 scrollArea.scrollTop = scrollArea.scrollHeight;
+                
                 let speed = Math.floor(Math.random() * 30) + 40; 
                 setTimeout(startTyping, speed);
             } else {
@@ -173,22 +188,15 @@ maaf alay`;
         }
 
         function answer(choice) {
-            // ==========================================
-            // GANTI NOMOR WA DI SINI (Format: 628xxxxx)
-            // ==========================================
             const nomorWA = "6285783741163"; 
-            
             let pesan = "";
 
             if (choice === 'yes') {
-                // Pesan jika dia pilih IYA
                 pesan = "Aku mau, tapi beri aku waktu dulu ya untuk pulih. Nanti kita coba lagi.";
             } else {
-                // Pesan jika dia pilih TIDAK
                 pesan = "Maaf, jawabanku tidak. Aku harap kamu menepati janjimu untuk tidak berharap lagi. Terima kasih.";
             }
 
-            // Membuka WhatsApp
             window.location.href = `https://wa.me/${nomorWA}?text=${encodeURIComponent(pesan)}`;
         }
     </script>
