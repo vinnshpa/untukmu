@@ -25,7 +25,62 @@
         #slideshow-container { height: 45vh; width: 100%; position: relative; overflow: hidden; border-bottom: 1px solid #333; flex-shrink: 0; }
         .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s ease-in-out; }
         .slide.active { opacity: 1; }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); z-index: 10; }
+        
+        /* --- MODIFIKASI: Vinyet & Film Grain --- */
+
+        /* Vinyet (Memperbarui class .overlay yang sudah ada) */
+        .overlay { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            /* Mengubah background flat menjadi radial gradient untuk efek vinyet */
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.9) 100%);
+            z-index: 10; 
+        }
+
+        /* Film Grain Overlay (Baru) */
+        .grain-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5; /* Di atas slide, di bawah vinyet */
+            pointer-events: none; /* Agar klik tembus ke bawah */
+            overflow: hidden;
+            opacity: 0.6; /* Sesuaikan intensitas grain di sini */
+        }
+
+        /* Membuat noise grain menggunakan pseudo-element dan SVG base64 */
+        .grain-overlay::before {
+            content: "";
+            position: absolute;
+            /* Membuat elemen jauh lebih besar dari container untuk animasi */
+            top: -200%;
+            left: -200%;
+            width: 400%;
+            height: 400%;
+            /* Base64 SVG Noise Pattern yang ringan */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+            /* Animasi 'steps' agar gerakannya patah-patah seperti film jadul */
+            animation: grainAnimation 1s steps(4) infinite;
+        }
+
+        /* Keyframes untuk menggerakkan grain secara acak */
+        @keyframes grainAnimation {
+            0% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            30% { transform: translate(3%, -7%); }
+            50% { transform: translate(-8%, 2%); }
+            70% { transform: translate(6%, 9%); }
+            90% { transform: translate(-3%, 4%); }
+            100% { transform: translate(0, 0); }
+        }
+        /* --------------------------------------- */
+
 
         /* Text Area */
         #text-scroll-area { flex-grow: 1; padding: 25px; overflow-y: auto; scroll-behavior: smooth; text-align: left; position: relative; }
@@ -52,8 +107,7 @@
 
         <div id="main-page">
             <div id="slideshow-container">
-                <div class="overlay"></div>
-                <img src="media/foto1.jpg" class="slide active" alt="Foto 1">
+                <div class="overlay"></div> <div class="grain-overlay"></div> <img src="media/foto1.jpg" class="slide active" alt="Foto 1">
                 <img src="media/foto2.jpg" class="slide" alt="Foto 2">
                 <img src="media/foto3.jpg" class="slide" alt="Foto 3">
                 <img src="media/foto4.jpg" class="slide" alt="Foto 4">
