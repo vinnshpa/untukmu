@@ -1,3 +1,8 @@
+Baik, ini adalah kodenya.
+
+Saya telah menghapus semua CSS dan elemen HTML yang terkait dengan efek *film grain* (`.grain-overlay` dan animasinya). Efek *vinyet* pada kelas `.overlay` tetap dipertahankan seperti yang diminta.
+
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -26,61 +31,17 @@
         .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s ease-in-out; }
         .slide.active { opacity: 1; }
         
-        /* --- MODIFIKASI: Vinyet & Film Grain --- */
-
-        /* Vinyet (Memperbarui class .overlay yang sudah ada) */
+        /* Vinyet Overlay */
         .overlay { 
             position: absolute; 
             top: 0; 
             left: 0; 
             width: 100%; 
             height: 100%; 
-            /* Mengubah background flat menjadi radial gradient untuk efek vinyet */
+            /* Radial gradient untuk efek vinyet (sudut gelap) */
             background: radial-gradient(circle, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.9) 100%);
             z-index: 10; 
         }
-
-        /* Film Grain Overlay (Baru) */
-        .grain-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5; /* Di atas slide, di bawah vinyet */
-            pointer-events: none; /* Agar klik tembus ke bawah */
-            overflow: hidden;
-            opacity: 0.6; /* Sesuaikan intensitas grain di sini */
-        }
-
-        /* Membuat noise grain menggunakan pseudo-element dan SVG base64 */
-        .grain-overlay::before {
-            content: "";
-            position: absolute;
-            /* Membuat elemen jauh lebih besar dari container untuk animasi */
-            top: -200%;
-            left: -200%;
-            width: 400%;
-            height: 400%;
-            /* Base64 SVG Noise Pattern yang ringan */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
-            background-size: 200px 200px;
-            /* Animasi 'steps' agar gerakannya patah-patah seperti film jadul */
-            animation: grainAnimation 1s steps(4) infinite;
-        }
-
-        /* Keyframes untuk menggerakkan grain secara acak */
-        @keyframes grainAnimation {
-            0% { transform: translate(0, 0); }
-            10% { transform: translate(-5%, -5%); }
-            30% { transform: translate(3%, -7%); }
-            50% { transform: translate(-8%, 2%); }
-            70% { transform: translate(6%, 9%); }
-            90% { transform: translate(-3%, 4%); }
-            100% { transform: translate(0, 0); }
-        }
-        /* --------------------------------------- */
-
 
         /* Text Area */
         #text-scroll-area { flex-grow: 1; padding: 25px; overflow-y: auto; scroll-behavior: smooth; text-align: left; position: relative; }
@@ -107,7 +68,9 @@
 
         <div id="main-page">
             <div id="slideshow-container">
-                <div class="overlay"></div> <div class="grain-overlay"></div> <img src="media/foto1.jpg" class="slide active" alt="Foto 1">
+                <div class="overlay"></div>
+                
+                <img src="media/foto1.jpg" class="slide active" alt="Foto 1">
                 <img src="media/foto2.jpg" class="slide" alt="Foto 2">
                 <img src="media/foto3.jpg" class="slide" alt="Foto 3">
                 <img src="media/foto4.jpg" class="slide" alt="Foto 4">
@@ -139,10 +102,10 @@
 
     <script>
         // TEKS SURAT
-        const fullText = `hai Sherlyn, ini aku Calvin
-aku mau nanya untuk yg terakhir kalinya
+        const fullText = `hai Sherlyn, bagaimana kabarmu? ini aku Calvin
+aku disini ingin bertanya untuk yg terakhir kalinya
 
-bagaimana apakah setelah kamu merasa cukup menyendirinya apakah kita bisa bersama lagi seperti dulu?
+apakah setelah kamu merasa cukup menyendirinya apakah kita bisa bersama lagi seperti dulu?
 apakah kamu masih mau menjalani hubungan ini denganku?
 
 kalau kamu tanya aku, aku masih sangat ingin menjadi pasanganmu, aku masih mau memenuhi semua kebutuhan mu, menemanimu setiap hari, masih ingin menjadi seseorang yang bisa menyenangkan mu setiap saat, dan masih banyak hal yang ingin ku lakukan bersamamu, terlepas dari masalah keyakinan kita aku hanya mau tetap bersamamu setidaknya sampai kita benar-benar sudah ikhlas dan bisa saling merelakan semuanya
@@ -152,6 +115,12 @@ bukankah itu worth it?
 kita juga masih kuliah, perjalanan hidup kita masih panjang, dan masih jauh dari jenjang pernikahan
 jadi tidak ada salahnya kita bersama dulu selama kuliah hehe
 aku gapapa di sakiti berkali-kali asal bisa tetap bersamamu
+kalau kamu pikir ini tidak ada ujungnya, kamu salah
+pasti ada kok semakin lama pasti akan ada ujungnya
+dah pastinya tidak akan mengecewakan kamu
+kalau pun keyakinan kita merupakan alasan utama mu, aku rela masuk kristen agar bisa bersamamu hingga tua nanti
+aku janji ga bakalan posesif lagi, kamu bebas mau ngapain asal tetap kasih kabar hehe
+aku tau aku udah sering berjanji soal ini tapi kali ini adalah janji mati ku untukmu
 
 kamu adalah orang yg benar-benar ku sayangi, kadang aku tuh ngeliat kamu kayak adik ku sendiri loh hehe, aku benar-benar ingin melihatmu menggapai mimpimu bersamaku, walau pun misalnya aku tidak bisa menemanimu sampai tua nnti setidaknya aku berhasil menjagamu dan memastikan kamu tidak kesulitan selama bersamaku
 sejujurnya aku juga butuh penyemangat... dan kamulah orangnya
@@ -160,7 +129,9 @@ tak peduli apa kata orang aku tetap memilihmu
 ketika aku lagi senang, lagi down, lagi capek, lagi ada masalah pasti pelariannya ke kamu
 aku butuh kamu:)
 kalaupun kamu gamau pacaran lagi setidaknya kan kita masih bisa HTS-an hehe
-hehe aku masih ngarep
+hehe aku masih ngarep 
+efek terlalu sayang ya gini hehe
+besar harapanku untuk bisa bersama kembali
 
 tapi ini semua tergantung kamu kok
 
@@ -168,6 +139,7 @@ jika jawabanmu iya, aku akan sangat bahagia, tapi kita ga bakal langsung balikan
 jadi kayak kamu ngasih tau kamu mau lanjut tapi butuh waktu dulu untuk kamu pulih
 
 tapi jika jawabanmu memang tidak, well that's your choice, aku janji bakal stop ngejar kamu lagi dan gak bakal gangguin kamu lagi, aku bakal sepenuhnya menyerah dan tidak berharap lagi🙂
+at least aku udah tau kenyataannya
 
 aku melihat kalau kamu masih ragu" dalam menyudahi hubungan ini makanya aku menanyakan hal ini
 tapi aku janji ini yg terakhir aku nanya-nanya soal ginian
@@ -259,3 +231,5 @@ maaf kalau typing-ku alay hehe`;
     </script>
 </body>
 </html>
+
+```
